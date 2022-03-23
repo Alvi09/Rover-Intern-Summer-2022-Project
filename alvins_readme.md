@@ -15,6 +15,7 @@
   4) Use dict to output a new CSV called sitters.csv
 
 ## Libraries used
+  - `import csv` to handle reading csv
 
 
 ## Decisions and tradeoffs
