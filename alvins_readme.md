@@ -19,7 +19,12 @@
 
 
 ## Decisions and tradeoffs
-
+  - What data structure should I use to store the information? Should I use a list or a dictionary? What should be the keys, the values?
+    - Dictionary sounded much easier to work with, because I can just check, "Hey, is this email in this dictionary? If so, we don't need to create a new one, let's just update the existing values
+    
+  - Should I try to update the scores in one go? Would it be better to instead, have a function that loops through everything already, and we just call that function whenever we need to?
+    - Not sure how to update the score averages in one go, since that'd require the rating / len(how many times the user sat dogs)
+    - Probably better to do the latter, but need to take into time complexity since we're looping through a big CSV file again
 
 ## Features
 
