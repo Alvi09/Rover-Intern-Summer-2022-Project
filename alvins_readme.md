@@ -5,6 +5,7 @@
 
 ## Assumptions
   - Profile Score's distinct letters doesn't take in account upper / lower (i.e A and a count as one distinct letter)
+  - Do I need to error check CSV file? What if there are negative ratings? (I assume it's 0-5?)
 
 
 
