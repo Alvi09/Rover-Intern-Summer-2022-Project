@@ -27,6 +27,10 @@
   - Should I try to update the scores in one go? Would it be better to instead, have a function that loops through everything already, and we just call that function whenever we need to?
     - Not sure how to update the score averages in one go, since that'd require the rating / len(how many times the user sat dogs)
     - Probably better to do the latter, but need to take into time complexity since we're looping through a big CSV file again
+    
+  - Should I store the whole CSV file into a 2D list? Or should I try to parse them on the go?
+    - I think store into a 2D list, and use that list whenever we want to access anything from the CSV file
+    - Reason for this is bc the file pointer changes, so I can't go back to the top of the CSV file if I wanted to (unless there's a way but I couldn't find atm)
 
 ## Features
 
