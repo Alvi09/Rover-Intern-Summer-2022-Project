@@ -59,22 +59,31 @@ def populate_dict(local_stored_csv):
 
             Format scores to 2 decimal places
     '''
-    sitters_list_of_d = []
+    list_of_sitters_d = []
 
     for row in local_stored_csv:
         sitters_email, sitters_name = row[10], row[6]
         distinct_letter_len = get_distinct_letter_len(sitters_name)
         
-        if sitters_email not in sitters_list_of_d:
+        if sitters_email not in list_of_sitters_d:
             profile_score = "{:.2f}".format(get_profile_score(distinct_letter_len))
             rating_score = "{:.2f}".format(get_rating_score(sitters_email))
             search_score = "{:.2f}".format(get_search_score(sitters_email, profile_score, rating_score))
 
             sitters_d = {"email": sitters_email, "name": sitters_name, "profile_score": profile_score, "rating_score": rating_score, "search_score": search_score}
 
-            sitters_list_of_d.append(sitters_d)
+            list_of_sitters_d.append(sitters_d)
 
-    print(sitters_d)
+    return list_of_sitters_d
+
+def convert_to_csv_file(list_of_sitter_dicts):
+    sitters_info = ['email', 'name', 'profile_score', 'rating_score', 'search_score']
+    sorted_list_of_sitter_dicts = sorted(list_of_sitter_dicts, key = lambda x: (-float(x['search_score']), x['name']))
+    
+    with open('sitters.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames = sitters_info)
+        writer.writeheader()
+        writer.writerows(sorted_list_of_sitter_dicts)
 
 def store_csv(csvreader):
     csvfile_to_2D_list = []
@@ -94,6 +103,7 @@ if __name__ == "__main__":
     header = next(csvreader)     # Skips the first row of csv
 
     stored_csv = store_csv(csvreader)
-    populate_dict(stored_csv)
+    list_of_sitter_dicts = populate_dict(stored_csv)
+    convert_to_csv_file(list_of_sitter_dicts)
 
     file.close()
