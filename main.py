@@ -1,4 +1,3 @@
-from calendar import c
 import csv
 
 def get_distinct_letter_len(sitter_name):
@@ -18,6 +17,9 @@ def get_num_sitter_stays(sitter_email):
     
     return d[sitter_email]
 
+def get_profile_score(distinct_letter_len):
+    return 5 * (distinct_letter_len / 26)
+
 def get_rating_score(sitter_email):
     # Correct for Paul S. (Rating score of 3.0 (i.e 21 / 7)) tested!
     d = {}
@@ -28,14 +30,28 @@ def get_rating_score(sitter_email):
             d[curr_sitter_email] += int(curr_rating)
         else:
             d[curr_sitter_email] = int(curr_rating)
-    
+
     return d[sitter_email] / get_num_sitter_stays(sitter_email)
+
+def get_search_score(sitter_email, profile_score, rating_score):
+    num_sitter_stays = get_num_sitter_stays(sitter_email)
+
+    # What if the number of stays is between 1 - 9? Is it the avg of profile score and rating score?? (Ask)
+    if num_sitter_stays == 0:
+        return float(profile_score)
+    
+    elif num_sitter_stays >= 10:
+        return float(rating_score)
+    
+    # IDK IF THIS IS HOW U ACTUALLY CALCULATE IT (WAIT FOR EMAIL REPLY)
+    else:
+        return (float(profile_score) + float(rating_score)) / 2
 
 def populate_dict(local_stored_csv):
     '''
     Loop through each row in the csv
         Populate our dictionary with the sitter_email, sitter_name, profile_score, rating_score, and search_score
-            profile_score - 5x fraction of distinct letters (use set) in sitter_name (5*6 or 5* (1/6))
+            profile_score - 5x fraction of distinct letters (use set) in sitter_name (5 * (distinct_len / 26))
             rating_score - avg of stay ratings
             search_score - weighted avg of profile_score and rating_score
                 If sitter has no stays, search_score = profile_score
@@ -48,17 +64,15 @@ def populate_dict(local_stored_csv):
     for row in local_stored_csv:
         sitters_email, sitters_name = row[10], row[6]
         distinct_letter_len = get_distinct_letter_len(sitters_name)
-        num_sitter_stays = get_num_sitter_stays(sitters_email)
         
         if sitters_email in sitters_list_of_d:
             # Update scores?
             pass
 
         else:
-            profile_score = "{:.2f}".format(5 * (1 / distinct_letter_len))
-            search_score = 0
-
+            profile_score = "{:.2f}".format(get_profile_score(distinct_letter_len))
             rating_score = "{:.2f}".format(get_rating_score(sitters_email))
+            search_score = "{:.2f}".format(get_search_score(sitters_email, profile_score, rating_score))
 
             sitters_d = {"email": sitters_email, "name": sitters_name, "profile_score": profile_score, "rating_score": rating_score, "search_score": search_score}
 
