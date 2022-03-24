@@ -65,11 +65,7 @@ def populate_dict(local_stored_csv):
         sitters_email, sitters_name = row[10], row[6]
         distinct_letter_len = get_distinct_letter_len(sitters_name)
         
-        if sitters_email in sitters_list_of_d:
-            # Update scores?
-            pass
-
-        else:
+        if sitters_email not in sitters_list_of_d:
             profile_score = "{:.2f}".format(get_profile_score(distinct_letter_len))
             rating_score = "{:.2f}".format(get_rating_score(sitters_email))
             search_score = "{:.2f}".format(get_search_score(sitters_email, profile_score, rating_score))
